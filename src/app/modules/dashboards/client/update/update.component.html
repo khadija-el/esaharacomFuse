@@ -1,0 +1,39 @@
+<mat-card >
+  <mat-card-title class="font-normal md:font-bold">{{title}}</mat-card-title>
+  <mat-card-content>
+
+    <form [formGroup]="myForm" class="flex flex-row flex-wrap">
+
+      <mat-form-field appearance="fill" class="w-full p-1">
+        <mat-label>name</mat-label>
+        <input matInput formControlName="name" type="text">
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" class="w-full p-1">
+        <mat-label>tel</mat-label>
+        <input matInput formControlName="tel" type="text">
+        <!-- <mat-error *ngIf="myForm.get('designation').hasError('duplicated')">Le nom existe déjà!</mat-error> -->
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" class="w-full p-1">
+        <mat-label>adresse</mat-label>
+        <input matInput formControlName="adresse" type="text">
+      </mat-form-field>
+
+      <mat-divider></mat-divider>
+
+    </form>
+
+  </mat-card-content>
+
+  <mat-card-actions class="justify-end">
+
+      <div class="flex flex-row gap-2">
+        <button mat-raised-button color="primary" (click)="back()">Retour</button>
+        <button mat-raised-button color="primary" (click)="submit(myForm.value)" [disabled]="myForm.invalid">Valider
+        </button>
+      </div>
+
+  </mat-card-actions>
+</mat-card>
+

@@ -1,0 +1,83 @@
+
+<div class="flex flex-col gap-5"  >
+    <h1 >Mise à jour des articles</h1>
+     <table mat-table [dataSource]="dataSource">
+      <ng-container matColumnDef="reference" >
+        <th mat-header-cell *matHeaderCellDef mat-sort-header class="p-3 text-sm font-sans tracking-wider text-left">Référence</th>
+        <td mat-cell *matCellDef="let row" class="p-4 text-sm font-sans text-gray-500">{{row.reference}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="designation">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header class="p-3 text-sm font-sans tracking-wider text-left">Désignation</th>
+        <td mat-cell *matCellDef="let row" class="p-4 text-sm font-sans text-gray-500">{{row.designation}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="stockInitial">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header class="p-3 text-sm font-sans tracking-wider text-left">Stock Initial</th>
+        <td mat-cell *matCellDef="let row" class="p-4 text-sm font-sans text-gray-500">{{row.stockInitial}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="stockFinal">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header class="p-3 text-sm font-sans tracking-wider text-left">Stock Final</th>
+        <td mat-cell *matCellDef="let row" class="p-4 text-sm font-sans text-gray-500">{{row.stockFinal}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="qteAchete">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header class="p-3 text-sm font-sans tracking-wider text-left">Qté Entrée</th>
+        <td mat-cell *matCellDef="let row" class="p-4 text-sm font-sans text-gray-500">{{row.qteAchete}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="qteVendue">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header class="p-3 text-sm font-sans tracking-wider text-left">Qté Sortie</th>
+        <td mat-cell *matCellDef="let row" class="p-4 text-sm font-sans text-gray-500">{{row.qteVendue}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="prixAchat_HT">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header class="p-3 text-sm font-sans tracking-wider text-left">PUA HT</th>
+        <td mat-cell *matCellDef="let row" class="p-4 text-sm font-sans text-gray-500">{{row.prixAchat_HT}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="prixAchat_TTC">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header class="p-3 text-sm font-sans tracking-wider text-left">PUA TTC</th>
+        <td mat-cell *matCellDef="let row" class="p-4 text-sm font-sans text-gray-500">{{row.prixAchat_TTC}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="prixVente_HT">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header class="p-3 text-sm font-sans tracking-wider text-left">Puv HT</th>
+        <td mat-cell *matCellDef="let row" class="p-4 text-sm font-sans text-gray-500">{{row.prixVente_HT}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="prixVente_TTC">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header class="p-3 text-sm font-sans tracking-wider text-left">PUV TTC</th>
+        <td mat-cell *matCellDef="let row" class="p-4 text-sm font-sans text-gray-500">{{row.prixVente_TTC}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="info">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header class="p-3 text-sm font-sans tracking-wider text-left">Info</th>
+        <td mat-cell *matCellDef="let row" class="p-4 text-sm font-sans text-gray-500">{{row.info}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="option" style="flex-direction: row-reverse;">
+        <th mat-header-cell *matHeaderCellDef >
+          <button mat-icon-button color="primary" (click)="add()">
+            <mat-icon svgIcon="add_circle"></mat-icon>
+          </button>
+        </th>
+        <td mat-cell *matCellDef="let row">
+          <div class="button-row">
+            <button mat-icon-button  color="primary" (click)="edit(row)">
+                <mat-icon svgIcon="edit"></mat-icon>
+            </button>
+            <button mat-icon-button color="warn" (click)="delete(row)">
+                <mat-icon svgIcon="delete"></mat-icon>
+            </button>
+            <button mat-icon-button color="primary" (click)="printD()">
+                <mat-icon svgIcon="print"></mat-icon>
+            </button>
+          </div>
+        </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </div>

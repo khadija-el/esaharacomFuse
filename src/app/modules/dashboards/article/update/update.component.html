@@ -1,0 +1,77 @@
+<mat-card >
+  <mat-card-title class="font-normal md:font-bold">{{title}}</mat-card-title>
+  <mat-card-content>
+
+    <form [formGroup]="myForm" class="flex flex-row flex-wrap">
+
+      <mat-form-field appearance="fill" class="w-full p-1">
+        <mat-label>Ref Fournisseur</mat-label>
+        <input matInput formControlName="reference" type="text">
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" class="w-full p-1">
+        <mat-label>Designation</mat-label>
+        <input matInput formControlName="designation" type="text">
+        <!-- <mat-error *ngIf="myForm.get('designation').hasError('duplicated')">Le nom existe déjà!</mat-error> -->
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" class="w-full p-1">
+        <mat-label>Info</mat-label>
+        <input matInput formControlName="info" type="text">
+      </mat-form-field>
+
+      <mat-divider></mat-divider>
+
+      <mat-form-field appearance="fill" class="w-1/2 p-1">
+        <mat-label>PUA HT</mat-label>
+        <input matInput formControlName="prixAchat_HT" type="text">
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" class="w-1/2 p-1">
+        <mat-label>PUA TTC</mat-label>
+        <input matInput formControlName="prixAchat_TTC" type="text">
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" class="w-1/2 p-1">
+        <mat-label>PUV HT</mat-label>
+        <input matInput formControlName="prixVente_HT" type="text">
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" class="w-1/2 p-1">
+        <mat-label>PUV TTC</mat-label>
+        <input matInput formControlName="prixVente_TTC" type="text">
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" class="w-1/2 md:w-1/4 p-1">
+        <mat-label>Stock Initial</mat-label>
+        <input matInput formControlName="stockInitial" type="number">
+      </mat-form-field>
+      <mat-form-field appearance="fill" class="w-1/2 md:w-1/4 p-1">
+        <mat-label>Stock Final</mat-label>
+        <input matInput formControlName="stockFinal" type="number">
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" class="w-1/2 md:w-1/4 p-1">
+        <mat-label>Qte Entree</mat-label>
+        <input matInput formControlName="qteAchete" type="number" [readonly]="false">
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" class="w-1/2 md:w-1/4 p-1">
+        <mat-label>Qte Sortie</mat-label>
+        <input matInput formControlName="qteVendue" type="number" [readonly]="false">
+      </mat-form-field>
+
+    </form>
+
+  </mat-card-content>
+
+  <mat-card-actions class="justify-end">
+
+      <div class="flex flex-row gap-2">
+        <button mat-raised-button color="primary" (click)="back()">Retour</button>
+        <button mat-raised-button color="primary" (click)="submit(myForm.value)" [disabled]="myForm.invalid">Valider
+        </button>
+      </div>
+
+  </mat-card-actions>
+</mat-card>
