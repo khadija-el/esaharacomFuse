@@ -116,7 +116,7 @@ export class UpdateComponent implements OnInit,OnDestroy {
     this.createForm();
   }
   back(){
-    this.router.navigate(['/client']);
+    this.router.navigate(['/dashboards/client']);
 
   }
   ngOnDestroy(): void {

@@ -1,9 +1,7 @@
-<mat-card >
-  <mat-card-title class="font-normal md:font-bold">{{title}}</mat-card-title>
-  <mat-card-content>
-
+<mat-card class="flex flex-col gap-5">
+  <mat-card-title >{{title}}</mat-card-title>
+  <mat-card-content class="bg-slate-400">
     <form [formGroup]="myForm" class="flex flex-row flex-wrap">
-
       <mat-form-field appearance="fill" class="w-full p-1">
         <mat-label>Ref Fournisseur</mat-label>
         <input matInput formControlName="reference" type="text">

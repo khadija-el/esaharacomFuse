@@ -66,13 +66,13 @@ export class ClientComponent implements OnInit,OnDestroy {
 
   add() {
 
-    this.Router.navigate(['/client/update', 0]);
+    this.Router.navigate(['/dashboards/client/update', 0]);
     // this.router.navigate(['update', 0], { relativeTo: this.route });
   }
 
   edit(o: Client) {
 
-    this.Router.navigate(['/client/update', o.id]);
+    this.Router.navigate(['/dashboards/client/update', o.id]);
     // this.router.navigate(['update', o.id], { relativeTo: this.route });
 
   }

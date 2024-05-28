@@ -1,11 +1,11 @@
 
 import { Routes } from '@angular/router';
-import { ArticleComponent } from './article.component';
+import { LivraisonComponent } from './livraison.component';
 
 export default [
     {
         path     : '',
-        component: ArticleComponent,
+        component: LivraisonComponent,
         title: 'list',
 
     },

@@ -1,3 +1,5 @@
+import { DateTime } from "luxon";
+
 export class Article {
     id = 0;
     reference = 'article1';
@@ -17,4 +19,33 @@ export class Article {
     name = 'khadija';
     tel = '06151515';
     adresse = '';
+  }
+  export class User {
+    id = 0;
+    name = 'khadija';
+    tel = '06151515';
+    adresse = '';
+  }
+
+  export class Livraison {
+    id = 0;
+    numero = 'khadija';
+    date = DateTime.now;
+    montantHt = '';
+    montantTTC = '';
+    tva = '';
+    idclient=''
+  }
+  export class Detail {
+    id = 0;
+    numero = '';
+    qte = 1;
+    prix = 0;
+    montantHT = 0;
+    montantTTC = 0;
+    tva = 0;
+    article: Article;
+    idArticle = null;
+    idLivraison=null;
+    livraison:Livraison
   }

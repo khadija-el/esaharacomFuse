@@ -143,7 +143,7 @@ export class UpdateComponent implements OnInit, OnDestroy {
     this.createForm();
   }
   back(){
-    this.router.navigate(['/article']);
+    this.router.navigate(['/dashboards/article']);
 
   }
   ngOnDestroy(): void {
