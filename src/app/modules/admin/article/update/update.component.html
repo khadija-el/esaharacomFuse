@@ -1,77 +1,150 @@
-<mat-card >
-    <mat-card-title class="font-normal md:font-bold">{{title}}</mat-card-title>
-    <mat-card-content>
 
-      <form [formGroup]="myForm" class="flex flex-row flex-wrap">
+<div class="flex flex-col md:min-w-160 -m-6">
 
-        <mat-form-field appearance="fill" class="w-full p-1">
-          <mat-label>Ref Fournisseur</mat-label>
-          <input matInput formControlName="reference" type="text">
-        </mat-form-field>
+    <!-- Header -->
+    <div class="flex flex-0 items-center justify-between h-16 pr-3 sm:pr-5 pl-6 sm:pl-8 bg-primary text-on-primary">
+        <div class="text-lg font-medium">Artgicle</div>
+        <button mat-icon-button (click)="back()" [tabIndex]="-1">
+            <mat-icon class="text-current" [svgIcon]="'heroicons_outline:x'"></mat-icon>
+        </button>
+    </div>
 
-        <mat-form-field appearance="fill" class="w-full p-1">
-          <mat-label>Designation</mat-label>
-          <input matInput formControlName="designation" type="text">
-          <!-- <mat-error *ngIf="myForm.get('designation').hasError('duplicated')">Le nom existe déjà!</mat-error> -->
-        </mat-form-field>
+    <div class="flex flex-col flex-auto p-6 sm:p-8 overflow-y-auto">
+        <div class="grid w-full">
+            <ng-container [ngTemplateOutlet]="formTemplate"
+                [ngTemplateOutletContext]="{$implicit:myForm}"></ng-container>
 
-        <mat-form-field appearance="fill" class="w-full p-1">
-          <mat-label>Info</mat-label>
-          <input matInput formControlName="info" type="text">
-        </mat-form-field>
-
-        <mat-divider></mat-divider>
-
-        <mat-form-field appearance="fill" class="w-1/2 p-1">
-          <mat-label>PUA HT</mat-label>
-          <input matInput formControlName="prixAchat_HT" type="text">
-        </mat-form-field>
-
-        <mat-form-field appearance="fill" class="w-1/2 p-1">
-          <mat-label>PUA TTC</mat-label>
-          <input matInput formControlName="prixAchat_TTC" type="text">
-        </mat-form-field>
-
-        <mat-form-field appearance="fill" class="w-1/2 p-1">
-          <mat-label>PUV HT</mat-label>
-          <input matInput formControlName="prixVente_HT" type="text">
-        </mat-form-field>
-
-        <mat-form-field appearance="fill" class="w-1/2 p-1">
-          <mat-label>PUV TTC</mat-label>
-          <input matInput formControlName="prixVente_TTC" type="text">
-        </mat-form-field>
-
-        <mat-form-field appearance="fill" class="w-1/2 md:w-1/4 p-1">
-          <mat-label>Stock Initial</mat-label>
-          <input matInput formControlName="stockInitial" type="number">
-        </mat-form-field>
-        <mat-form-field appearance="fill" class="w-1/2 md:w-1/4 p-1">
-          <mat-label>Stock Final</mat-label>
-          <input matInput formControlName="stockFinal" type="number">
-        </mat-form-field>
-
-        <mat-form-field appearance="fill" class="w-1/2 md:w-1/4 p-1">
-          <mat-label>Qte Entree</mat-label>
-          <input matInput formControlName="qteAchete" type="number" [readonly]="false">
-        </mat-form-field>
-
-        <mat-form-field appearance="fill" class="w-1/2 md:w-1/4 p-1">
-          <mat-label>Qte Sortie</mat-label>
-          <input matInput formControlName="qteVendue" type="number" [readonly]="false">
-        </mat-form-field>
-
-      </form>
-
-    </mat-card-content>
-
-    <mat-card-actions class="justify-end">
-
-        <div class="flex flex-row gap-2">
-          <button mat-raised-button color="primary" (click)="back()">Retour</button>
-          <button mat-raised-button color="primary" (click)="submit(myForm.value)" [disabled]="myForm.invalid">Valider
-          </button>
+            <ng-container *ngIf="showMessage$ | async as e">
+                <fuse-alert class="w-full my-5" [@shake]="true" [type]="e.code < 0 ? 'warn' : 'success'"
+                    [appearance]="'border'">
+                    <span fuseAlertTitle>Message</span>
+                    {{e.message}}
+                </fuse-alert>
+            </ng-container>
         </div>
+        <!-- Actions -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between mt-4 sm:mt-6">
+            <div class="-ml-2">
+            </div>
+            <div class="flex items-center gap-2 mt-4 sm:mt-0">
+                <button class="ml-auto sm:ml-0" mat-button (click)="back()">
+                    Retour
+                </button>
 
-    </mat-card-actions>
-  </mat-card>
+                <button class="order-first sm:order-last" mat-flat-button [color]="'primary'"
+                    (click)="submit(myForm.getRawValue())">
+                    Enregistrer
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #formTemplate let-myForm>
+    <form [formGroup]="myForm">
+        <div class="grid sm:grid-cols-12 md:grid-cols-3 gap-5">
+
+            <mat-form-field appearance="fill" >
+                <mat-label>Reference</mat-label>
+                <input matInput formControlName="reference" type="text" required>
+                <mat-error
+                    *ngIf="myForm.controls.reference.invalid && (myForm.controls.reference.dirty || myForm.controls.reference.touched)">
+                    Champ est requis
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="fill" >
+                <mat-label>Designation</mat-label>
+                <input matInput formControlName="designation" type="text" required>
+                <mat-error
+                    *ngIf="myForm.controls.designation.invalid && (myForm.controls.designation.dirty || myForm.controls.designation.touched)">
+                    Champ est requis
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="fill">
+                <mat-label>PUA HT</mat-label>
+                <input matInput formControlName="prixAchat_HT" type="text" required>
+                <mat-error
+                    *ngIf="myForm.controls.prixAchat_HT.invalid && (myForm.controls.prixAchat_HT.dirty || myForm.controls.prixAchat_HT.touched)">
+                    Champ est requis
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="fill" >
+                <mat-label>PUA TTC</mat-label>
+                <input matInput formControlName="prixAchat_TTC" type="text" required>
+                <mat-error
+                    *ngIf="myForm.controls.prixAchat_TTC.invalid && (myForm.controls.prixAchat_TTC.dirty || myForm.controls.prixAchat_TTC.touched)">
+                    Champ est requis
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="fill">
+                <mat-label>PUV HT</mat-label>
+                <input matInput formControlName="prixVente_HT" type="text" required>
+                <mat-error
+                    *ngIf="myForm.controls.prixVente_HT.invalid && (myForm.controls.prixVente_HT.dirty || myForm.controls.prixVente_HT.touched)">
+                    Champ est requis
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="fill" >
+                <mat-label>PUV TTC</mat-label>
+                <input matInput formControlName="prixVente_TTC" type="text" required>
+                <mat-error
+                    *ngIf="myForm.controls.prixVente_TTC.invalid && (myForm.controls.prixVente_TTC.dirty || myForm.controls.prixVente_TTC.touched)">
+                    Champ est requis
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="fill" >
+                <mat-label>Qte acheté</mat-label>
+                <input matInput formControlName="qteAchete" type="text" required>
+                <mat-error
+                    *ngIf="myForm.controls.qteAchete.invalid && (myForm.controls.qteAchete.dirty || myForm.controls.qteAchete.touched)">
+                    Champ est requis
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="fill" >
+                <mat-label>Qte vendue</mat-label>
+                <input matInput formControlName="qteVendue" type="text" required>
+                <mat-error
+                    *ngIf="myForm.controls.qteVendue.invalid && (myForm.controls.qteVendue.dirty || myForm.controls.qteVendue.touched)">
+                    Champ est requis
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="fill" >
+                <mat-label>Stock Initial</mat-label>
+                <input matInput formControlName="StockInitial" type="text" required>
+                <mat-error
+                    *ngIf="myForm.controls.stockInitial.invalid && (myForm.controls.stockInitial.dirty || myForm.controls.stockInitial.touched)">
+                    Champ est requis
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="fill" >
+                <mat-label>Stock Final</mat-label>
+                <input matInput formControlName="stockFinal" type="text" required>
+                <mat-error
+                    *ngIf="myForm.controls.stockFinal.invalid && (myForm.controls.stockFinal.dirty || myForm.controls.stockFinal.touched)">
+                    Champ est requis
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="fill" >
+                <mat-label>Info</mat-label>
+                <input matInput formControlName="Info" type="text" required>
+                <mat-error
+                    *ngIf="myForm.controls.Info.invalid && (myForm.controls.Info.dirty || myForm.controls.Info.touched)">
+                    Champ est requis
+                </mat-error>
+            </mat-form-field>
+
+            <div></div>
+
+        </div>
+    </form>
+</ng-template>

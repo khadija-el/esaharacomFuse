@@ -8,21 +8,21 @@ export const defaultNavigation: FuseNavigationItem[] = [
         title: 'Client',
         type : 'basic',
         icon : 'heroicons_outline:chart-pie',
-        link : '/client'
+        link : '/admin/client'
     },
     {
         id   : 'article',
         title: 'Article',
         type : 'basic',
         icon : 'heroicons_outline:chart-pie',
-        link : '/article'
+        link : '/admin/article'
     },
     {
         id   : 'livraison',
         title: 'Livraison',
         type : 'basic',
         icon : 'heroicons_outline:chart-pie',
-        link : '/livraison'
+        link : '/admin/livraison'
     },
 ];
 export const compactNavigation: FuseNavigationItem[] = [
@@ -31,7 +31,7 @@ export const compactNavigation: FuseNavigationItem[] = [
         title: 'Example',
         type : 'basic',
         icon : 'heroicons_outline:chart-pie',
-        link : '/example'
+        link : '/admin/example'
     }
 ];
 export const futuristicNavigation: FuseNavigationItem[] = [
@@ -40,7 +40,7 @@ export const futuristicNavigation: FuseNavigationItem[] = [
         title: 'Example',
         type : 'basic',
         icon : 'heroicons_outline:chart-pie',
-        link : '/example'
+        link : '/admin/example'
     }
 ];
 export const horizontalNavigation: FuseNavigationItem[] = [
@@ -49,6 +49,6 @@ export const horizontalNavigation: FuseNavigationItem[] = [
         title: 'Example',
         type : 'basic',
         icon : 'heroicons_outline:chart-pie',
-        link : '/example'
+        link : '/admin/example'
     }
 ];

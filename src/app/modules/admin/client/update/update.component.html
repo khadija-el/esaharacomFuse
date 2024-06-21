@@ -1,81 +1,3 @@
-<!-- <mat-card >
-
-    <mat-card-title class="font-normal md:font-bold">{{title}}</mat-card-title>
-
-    <mat-card-content>
-
-      <form [formGroup]="myForm" class="flex flex-row flex-wrap">
-
-        <mat-form-field appearance="fill" class="w-full p-1">
-          <mat-label>Name</mat-label>
-          <input matInput formControlName="name" type="text">
-        </mat-form-field>
-
-        <mat-form-field appearance="fill" class="w-full p-1">
-          <mat-label>Tel</mat-label>
-          <input matInput formControlName="tel" type="text">
-        </mat-form-field>
-
-        <mat-form-field appearance="fill" class="w-full p-1">
-          <mat-label>Adresse</mat-label>
-          <input matInput formControlName="adresse" type="text">
-        </mat-form-field>
-
-        <mat-divider></mat-divider>
-
-      </form>
-
-    </mat-card-content>
-
-    <mat-card-actions class="justify-end">
-
-        <div class="flex flex-row gap-2">
-          <button mat-raised-button color="primary" (click)="back()">Retour</button>
-          <button mat-raised-button color="primary" (click)="submit(myForm.value)" [disabled]="myForm.invalid">Valider
-          </button>
-        </div>
-
-    </mat-card-actions>
-  </mat-card> -->
-<!--
-<div class="flex flex-col flex-auto min-w-0">
-    <div
-        class="flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between p-6 sm:py-8 sm:px-10 border-b bg-card dark:bg-transparent">
-        <div class="flex-1 min-w-0">
-            <div class="flex gap-3 mt-2">
-                <button mat-icon-button routerLink="./"><mat-icon
-                        svgIcon="heroicons_outline:arrow-small-left"></mat-icon></button>
-                <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight leading-7 sm:leading-10 truncate">
-                    Client
-                </h2>
-            </div>
-        </div>
-    </div>
-
-    <div class="w-full p-6 sm:p-10">
-        <ng-container [ngTemplateOutlet]="formTemplate" [ngTemplateOutletContext]="{$implicit:myForm}"></ng-container>
-
-        <ng-container *ngIf="showMessage$ | async as e">
-            <fuse-alert class="w-full my-5" [@shake]="true" [type]="e.code < 0 ? 'warn' : 'success'"
-                [appearance]="'border'">
-                <span fuseAlertTitle>Message</span>
-                {{e.message}}
-            </fuse-alert>
-        </ng-container>
-
-        <div class="w-full flex justify-between mt-10">
-            <button mat-raised-button (click)="back()">Retour</button>
-            <button mat-raised-button color="primary" (click)="submit(myForm.getRawValue())">
-                <span *ngIf="!myForm.disabled">
-                    Enregistrer
-                </span>
-                <mat-progress-spinner *ngIf="myForm.disabled" [diameter]="24" [mode]="'indeterminate'">
-                </mat-progress-spinner>
-            </button>
-        </div>
-    </div>
-</div> -->
-
 
 <div class="flex flex-col md:min-w-160 -m-6">
 
@@ -120,9 +42,9 @@
 
 <ng-template #formTemplate let-myForm>
     <form [formGroup]="myForm">
-        <div class="grid sm:grid-cols-2 md:grid-cols-4 gap-5">
+        <div class="grid sm:grid-cols-3 md:grid-cols-3 gap-5">
 
-            <mat-form-field appearance="fill">
+            <mat-form-field appearance="fill" class="sm:col-span-2 md:col-span-4">
                 <mat-label>Nom</mat-label>
                 <input matInput formControlName="name" type="text" required>
                 <mat-error
@@ -131,7 +53,7 @@
                 </mat-error>
             </mat-form-field>
 
-            <mat-form-field appearance="fill">
+            <mat-form-field appearance="fill" class="sm:col-span-2 md:col-span-4">
                 <mat-label>Tel</mat-label>
                 <input matInput formControlName="tel" type="text" required>
                 <mat-error
@@ -142,9 +64,9 @@
 
             <mat-form-field appearance="fill" class="sm:col-span-2 md:col-span-4">
                 <mat-label>Adresse</mat-label>
-                <input matInput formControlName="address" type="text" required>
+                <input matInput formControlName="adresse" type="text" required>
                 <mat-error
-                    *ngIf="myForm.controls.address.invalid && (myForm.controls.address.dirty || myForm.controls.address.touched)">
+                    *ngIf="myForm.controls.adresse.invalid && (myForm.controls.adresse.dirty || myForm.controls.adresse.touched)">
                     Champ est requis
                 </mat-error>
             </mat-form-field>

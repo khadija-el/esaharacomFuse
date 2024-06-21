@@ -4,22 +4,28 @@ import {  MatDividerModule } from '@angular/material/divider';
 import { MatExpansionModule, } from '@angular/material/expansion';
 import {  MatFormFieldModule,  } from '@angular/material/form-field';
 import {  MatIconModule } from '@angular/material/icon';
-import {  MatPaginatorModule } from '@angular/material/paginator';
+import {  MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import {  MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatSort } from '@angular/material/sort';
-import { Subject, Subscription, merge, startWith } from 'rxjs';
+import { MatSort, MatSortModule } from '@angular/material/sort';
+import { Subject, Subscription, catchError, filter, map, merge, startWith, switchMap, tap } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatTableModule } from '@angular/material/table';
 import { __await } from 'tslib';
-import { MatDialogModule } from '@angular/material/dialog';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { Article } from 'app/core/Models/models';
 import { UowService } from 'app/core/services/uow.service';
+import { UpdateComponent } from './update/update.component';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { CommonModule } from '@angular/common';
+import { MatInputModule } from '@angular/material/input';
 
 @Component({
   selector: 'app-article',
   standalone: true,
-  imports: [MatDividerModule,
+  imports: [CommonModule,
+    MatSortModule,
+    MatDividerModule,
     MatFormFieldModule,
     MatIconModule,
     MatPaginatorModule,
@@ -28,78 +34,83 @@ import { UowService } from 'app/core/services/uow.service';
     MatExpansionModule,
     MatPaginatorModule,
     MatTableModule,
-    MatDialogModule],
+    MatDialogModule,
+    MatProgressBarModule,
+   MatInputModule
+     ],
   templateUrl: './article.component.html',
-  styleUrl: './article.component.scss'
+
 })
-export class ArticleComponent implements OnInit, OnDestroy {
-  // @ViewChild(MatPaginator) paginator: MatPaginator;
-  // @ViewChild(MatSort) sort: MatSort;
+export class ArticleComponent   {
+    readonly dialog = inject(MatDialog);
+    readonly uow = inject(UowService);
+    readonly paginator: MatPaginator;
+    readonly sort: MatSort;
 
-  update = new Subject<boolean>();
+    isLoading: boolean = false;
+    private _unsubscribeAll: Subject<any> = new Subject<any>();
 
-  dataSource: Article[] = [];
+    readonly showMessage$ = new Subject<any>();
+    readonly update = new Subject<number>();
+    //public isLoadingResults = true;
 
-  displayedColumns = [
-    //  'select',
-    'reference',
-    'designation',
-    'stockInitial',
-    'stockFinal',
-    'qteAchete',
-    'qteVendue',
-    'prixAchat_HT',
-    'prixAchat_TTC',
-    'prixVente_HT',
-    'prixVente_TTC',
-    'info',
-    'option'
-  ];
-
-  panelOpenState = false;
-
-  reference = new FormControl('');
-  designation = new FormControl('');
-
-  constructor(private router: Router, private route: ActivatedRoute, private service: UowService) { }
-
-  ngOnDestroy(): void {
-  }
-
-  ngOnInit(): void {
-    const sub = this.service.articles.get().subscribe(
-      (r: any) => {
-        console.log(r);
-        this.dataSource = r;
-      }
-
+    readonly delete$ = new Subject<Article>();
+    readonly #delete$ = this.delete$.pipe(
+        switchMap(item => this.uow.fuseConfirmation.open().afterClosed().pipe(
+            filter((e: 'confirmed' | 'cancelled') => e === 'confirmed'),
+            tap(e => console.warn(e)),
+            switchMap(_ => this.uow.articles.delete(item.id).pipe(
+                catchError(this.uow.handleError),
+                map((e: any) => ({ code: e?.code < 0 ? -1 : 1, message: e?.code < 0 ? e.message : 'Enregistrement réussi' })),
+                tap(r => this.showMessage$.next({ message: r.message, code: r.code })),
+            )),
+        )),
     );
-    console.log("<<<<<<<<<<<<>>>>>>>>>>");
 
-  }
+   // readonly viewInitDone = new Subject<void>();
 
-  add() {
+    readonly articles$ = merge(
+        this.update,
+        this.#delete$,
+    ).pipe(
+        startWith(null),
+        switchMap(_ => this.uow.articles.get())
+        // map(list => list),
+    )
 
-    this.router.navigate(['/article/update', 0]);
-    // this.router.navigate(['update', 0], { relativeTo: this.route });
-  }
+    panelOpenState = false;
 
-  edit(o: Article) {
+    openDialog(o: Article, text) {
+        const dialogRef = this.dialog.open(UpdateComponent, {
+            // width: '1100px',
+            disableClose: true,
+            data: { model: o, title: text }
+        });
 
-    this.router.navigate(['/article/update', o.id]);
-    // this.router.navigate(['update', o.id], { relativeTo: this.route });
+        return dialogRef.afterClosed();
+    };
+    add() {
 
-  }
- printD(){
-window.print();
- }
-  async delete(o: Article) {
-    const r = await this.service.deleteDialog.openDialog('Article').toPromise();
-    if (r === 'ok') {
-      const sub = this.service.articles.delete(o.id).subscribe(() => this.update.next(true));
-
-      // this.subs.push(sub);
+        this.openDialog({} as Article, 'Ajouter Article').subscribe(result => {
+            if (result) {
+                this.update.next(0);
+            }
+        });
     }
-  }
+
+    edit(o: Article) {
+
+        this.openDialog(o, 'Modifier Article').subscribe((result: Article) => {
+            if (result) {
+                this.update.next(o.id);
+            }
+        });
+    }
+    search() {
+        this.update.next(0);
+    }
+    remove(o: Article) {
+        this.delete$.next(o);
+    }
 
 }

@@ -10,7 +10,7 @@ import { LayoutComponent } from 'app/layout/layout.component';
 export const appRoutes: Route[] = [
 
     // Redirect empty path to '/example'
-    {path: '', pathMatch : 'full', redirectTo: 'example'},
+    {path: '', pathMatch : 'full', redirectTo: 'admin'},
 
     // Redirect signed-in user to the '/example'
     //
@@ -66,7 +66,7 @@ export const appRoutes: Route[] = [
 
     // Admin routes
     {
-        path: '',
+        path: 'admin',
         canActivate: [AuthGuard],
         canActivateChild: [AuthGuard],
         component: LayoutComponent,
