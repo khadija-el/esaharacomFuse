@@ -52,7 +52,6 @@ export class ArticleComponent   {
 
     readonly showMessage$ = new Subject<any>();
     readonly update = new Subject<number>();
-    //public isLoadingResults = true;
 
     readonly delete$ = new Subject<Article>();
     readonly #delete$ = this.delete$.pipe(
@@ -78,7 +77,7 @@ export class ArticleComponent   {
         // map(list => list),
     )
 
-    panelOpenState = false;
+    //panelOpenState = false;
 
     openDialog(o: Article, text) {
         const dialogRef = this.dialog.open(UpdateComponent, {

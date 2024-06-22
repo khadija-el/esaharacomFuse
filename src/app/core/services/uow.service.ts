@@ -11,6 +11,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Observable, map, of, take, tap } from 'rxjs';
 import { SnackService } from '@fuse/services/snack/snack.service';
 import { FormControl, FormGroup } from '@angular/forms';
+import { LivraisonService } from './livraison.service';
 
 
 @Injectable({
@@ -20,7 +21,7 @@ export class UowService {
   config = {};// new ConfigService();
   articles = inject(ArticleService);
   clients = inject(clientService);
-  //livraisons = inject(clientService);
+  livraisons = inject(LivraisonService);
 
   //utils
  //   shared = inject(SharedService);

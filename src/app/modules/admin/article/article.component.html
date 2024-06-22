@@ -74,7 +74,7 @@
                 </div>
                 <!-- Rows -->
                 <ng-container *ngFor="let article of articles$ | async;">
-                    <div class="grid md:grid-cols-12  items-center gap-4 py-3 px-6 border-b">
+                    <div class="grid md:grid-cols-12 items-center gap-4 py-3 px-6 border-b">
 
                         <div class="truncate">
                             {{article.reference}}
@@ -103,7 +103,7 @@
                             {{article.qteVendue}}
                         </div>
                         <div class="hidden md:block truncate">
-                            {{article.StockInitial}}
+                            {{article.stockInitial}}
                         </div>
                         <div class="hidden md:block truncate">
                             {{article.stockFinal}}

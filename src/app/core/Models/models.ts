@@ -2,7 +2,7 @@ export class Article {
     id = 0;
     reference = 'article1';
     designation = 'article une';
-    StockInitial = 10;
+    stockInitial = 10;
     stockFinal = 10;
     qteAchete = 10;
     qteVendue = 10;
@@ -34,11 +34,11 @@ export class Article {
     id = 0;
     numero = '';
     actif = true;
-    dateCreation = new Date();
+    date = new Date();
     info = '';
-    montantHT = 0;
+    montant_HT = 0;
     tva = 20;
-    montantTTC = 0;
+    montant_TTC = 0;
     client: Client;
     idClient = null;
     childs: DetailLivraison[] = [];
@@ -47,13 +47,13 @@ export class Article {
   export class DetailLivraison {
     id = 0;
     numero = '';
-    designation = '';
+    //designation = '';
     qte = 1;
-    prixUnitaireHT = 0;
-    remiseHT = 0;
+    prixHT = 0;
+    //remiseHT = 0;
     montantHT = 0;
-    prixUnitaireTTC = 0;
-    remise_TTC = 0;
+    prixTTC = 0;
+   // remise_TTC = 0;
     montantTTC = 0;
     tva = 0;
     // livraisonClient: LivraisonClient;

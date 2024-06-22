@@ -3,7 +3,7 @@
 
     <!-- Header -->
     <div class="flex flex-0 items-center justify-between h-16 pr-3 sm:pr-5 pl-6 sm:pl-8 bg-primary text-on-primary">
-        <div class="text-lg font-medium">Artgicle</div>
+        <div class="text-lg font-medium">Article</div>
         <button mat-icon-button (click)="back()" [tabIndex]="-1">
             <mat-icon class="text-current" [svgIcon]="'heroicons_outline:x'"></mat-icon>
         </button>
@@ -42,9 +42,9 @@
 
 <ng-template #formTemplate let-myForm>
     <form [formGroup]="myForm">
-        <div class="grid sm:grid-cols-12 md:grid-cols-3 gap-5">
+        <div class="grid sm:grid-cols-10 md:grid-cols-4 gap-5">
 
-            <mat-form-field appearance="fill" >
+            <mat-form-field appearance="fill" class="sm:col-span-2 md:col-span-2">
                 <mat-label>Reference</mat-label>
                 <input matInput formControlName="reference" type="text" required>
                 <mat-error
@@ -53,7 +53,7 @@
                 </mat-error>
             </mat-form-field>
 
-            <mat-form-field appearance="fill" >
+            <mat-form-field appearance="fill"  class="sm:col-span-2 md:col-span-2" >
                 <mat-label>Designation</mat-label>
                 <input matInput formControlName="designation" type="text" required>
                 <mat-error
@@ -118,7 +118,7 @@
 
             <mat-form-field appearance="fill" >
                 <mat-label>Stock Initial</mat-label>
-                <input matInput formControlName="StockInitial" type="text" required>
+                <input matInput formControlName="stockInitial" type="text" required>
                 <mat-error
                     *ngIf="myForm.controls.stockInitial.invalid && (myForm.controls.stockInitial.dirty || myForm.controls.stockInitial.touched)">
                     Champ est requis
@@ -134,11 +134,11 @@
                 </mat-error>
             </mat-form-field>
 
-            <mat-form-field appearance="fill" >
+            <mat-form-field appearance="fill"  class="sm:col-span-2 md:col-span-4" >
                 <mat-label>Info</mat-label>
-                <input matInput formControlName="Info" type="text" required>
+                <input matInput formControlName="info" type="text" required>
                 <mat-error
-                    *ngIf="myForm.controls.Info.invalid && (myForm.controls.Info.dirty || myForm.controls.Info.touched)">
+                    *ngIf="myForm.controls.info.invalid && (myForm.controls.info.dirty || myForm.controls.info.touched)">
                     Champ est requis
                 </mat-error>
             </mat-form-field>

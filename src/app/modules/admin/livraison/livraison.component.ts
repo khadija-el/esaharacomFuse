@@ -1,13 +1,136 @@
-import { Component } from '@angular/core';
+import { Livraison } from './../../../core/Models/models';
+import { Component, Signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { UpdateComponent } from './update/update.component';
+import { Subject, catchError, delay, delayWhen, filter, map, merge, startWith, switchMap, tap } from 'rxjs';
+import { UowService } from 'app/core/services/uow.service';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatSort, MatSortModule } from '@angular/material/sort';
+import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { Router, RouterLink } from '@angular/router';
+import { FuseAlertComponent } from '@fuse/components/alert';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+import { MatSelectModule } from '@angular/material/select';
+import { MatIconModule } from '@angular/material/icon';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+
 
 @Component({
-  selector: 'app-livraison',
-  standalone: true,
-  imports: [CommonModule],
-  templateUrl: './livraison.component.html',
-  styleUrl: './livraison.component.scss'
+    selector: 'app-livraison',
+    standalone: true,
+    imports: [CommonModule,
+        FuseAlertComponent,
+        MatPaginatorModule,
+        FormsModule,
+        ReactiveFormsModule,
+        MatSortModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatButtonModule,
+        MatSelectModule,
+        MatIconModule,
+        MatProgressSpinnerModule,
+        RouterLink,
+        MatDatepickerModule,
+    ],
+    templateUrl: './livraison.component.html',
+
 })
 export class LivraisonComponent {
+
+    //readonly dialog = inject(MatDialog);
+    readonly uow = inject(UowService);
+    readonly paginator: MatPaginator;
+    readonly sort: MatSort;
+
+    isLoading: boolean = false;
+    private _unsubscribeAll: Subject<any> = new Subject<any>();
+    readonly showMessage$ = new Subject<any>();
+
+    readonly update = new Subject<number>();
+    readonly numero = new FormControl('');
+    readonly dateDebut = new FormControl('');
+    readonly dateFin = new FormControl('');
+    readonly montantTTC = new FormControl('');
+    readonly client = new FormControl('');
+    //
+    public isLoadingResults = true;
+    public totalRecords = 0;
+    //
+    readonly router = inject(Router);
+    //
+    clients = this.uow.clients.getForSelect();
+    //
+    readonly delete$ = new Subject<Livraison>();
+    readonly #delete$ = this.delete$.pipe(
+        switchMap(item => this.uow.fuseConfirmation.open().afterClosed().pipe(
+            filter((e: 'confirmed' | 'cancelled') => e === 'confirmed'),
+            tap(e => console.warn(e)),
+            switchMap(_ => this.uow.livraisons.delete(item.id).pipe(
+                catchError(this.uow.handleError),
+                map((e: any) => ({ code: e?.code < 0 ? -1 : 1, message: e?.code < 0 ? e.message : 'Enregistrement réussi' })),
+                tap(r => this.showMessage$.next({ message: r.message, code: r.code })),
+            )),
+        )),
+    );
+    //
+    readonly viewInitDone = new Subject<void>();
+    readonly dataSource: Signal<(Livraison)[]> = toSignal(this.viewInitDone.pipe(
+        delay(50),
+        switchMap(_ => merge(
+            this.sort.sortChange,
+            this.paginator.page,
+            this.update,
+            this.#delete$,
+        )),
+        // startWith(null as any),
+        map(_ => ({
+            startIndex: (this.paginator?.pageIndex || 0) * (this.paginator?.pageSize ?? 10),// startIndex
+            pageSize: this.paginator?.pageSize ?? 10,
+            numero: this.numero.value,
+            dateDebut: this.dateDebut.value,
+            dateFin: this.dateFin.value,
+            montantTTC: this.montantTTC.value,
+            idclient: this.client.value,
+        })),
+        tap(e => this.isLoadingResults = true),
+        switchMap(e => this.uow.livraisons.getAll(0, 0, this.numero, this.dateDebut, this.dateFin, this.montantTTC, this.client).pipe(
+            tap(),
+            map(e => e))
+        ),
+        tap(e => this.isLoadingResults = false),
+    ), { initialValue: [] }) as any;
+
+    ngAfterViewInit(): void {
+        // this.viewInitDone.next();
+    }
+    panelOpenState = false;
+
+    add() {
+        this.router.navigate(['/admin/livraison', 0]);
+    }
+
+    edit(o: Livraison) {
+        this.router.navigate(['/admin/livraison', o.id]);
+    }
+    search() {
+        this.update.next(0);
+    }
+    remove(o: Livraison) {
+        this.delete$.next(o);
+    }
+
+    reset() {
+        this.numero.setValue('');
+        this.dateDebut.setValue('');
+        this.dateFin.setValue('');
+        this.client.setValue('');
+        this.montantTTC.setValue('');
+        this.update.next(0);
+    }
 
 }

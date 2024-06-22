@@ -12,7 +12,7 @@ export class LivraisonService extends SuperService<Livraison> {
     super('livraison');
   }
 
-//   getAll(startIndex, pageSize, sortBy, sortDir, numero, dateCreationDebut, dateCreationFin, montantTTCMin, montantTTCMax, idEtatLivraison, idComercial, idClient) {
-//     return this.http.get(`${this.urlApi}/${this.controller}/getPage/${startIndex}/${pageSize}/${sortBy}/${sortDir}/${numero}/${dateCreationDebut}/${dateCreationFin}/${montantTTCMin}/${montantTTCMax}/${idEtatLivraison}/${idComercial}/${idClient}`);
-//   }
+  getAll(startIndex, pageSize, numero, dateDebut, dateFin, montantTTC, idClient) {
+    return this.http.get(`${this.urlApi}/${this.controller}/getAll/${startIndex}/${pageSize}/${numero}/${dateDebut}/${dateFin}/${montantTTC}/${idClient}`);
+  }
 }

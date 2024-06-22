@@ -21,6 +21,8 @@ export class SuperService<T> {
 
   delete = (id: any) => this.http.delete<any>(`${this.urlApi}/${this.controller}/Delete/${id}`);
   getById = (id:any) => this.http.get<T>(`${this.urlApi}/${this.controller}/GetById/${id}`);
+  getForSelect = () => this.http.get<{id: number, name: string}[]>(`${this.urlApi}/${this.controller}/getForSelect`);
+
 
 }
 

@@ -1,7 +1,7 @@
 import { ActivatedRoute, Router } from '@angular/router';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild, inject } from '@angular/core';
 import { Observable, Subject, catchError, switchMap, takeUntil, filter, map, tap, merge, startWith, take } from 'rxjs';
-import { FormControl, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormControl, FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatFormFieldModule, MatLabel } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -31,7 +31,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
         MatExpansionModule,
         MatProgressBarModule,
         MatSortModule,
-        MatTableModule,
+        MatTableModule,FormsModule,ReactiveFormsModule,
         MatDialogModule, CommonModule, MatInputModule],
 
     templateUrl: './client.component.html',
@@ -43,6 +43,7 @@ export class ClientComponent {
     readonly uow = inject(UowService);
     readonly paginator: MatPaginator;
     readonly sort: MatSort;
+    readonly name = new FormControl('');
 
     isLoading: boolean = false;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
@@ -64,9 +65,7 @@ export class ClientComponent {
         )),
     );
 
-   // readonly viewInitDone = new Subject<void>();
-
-    readonly clients$ = merge(
+     readonly clients$ = merge(
         this.update,
         this.#delete$,
     ).pipe(
