@@ -1,5 +1,5 @@
 import { Livraison } from './../../../core/Models/models';
-import { Component, Signal, inject } from '@angular/core';
+import { Component, Signal, ViewChild, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UpdateComponent } from './update/update.component';
 import { Subject, catchError, delay, delayWhen, filter, map, merge, startWith, switchMap, tap } from 'rxjs';
@@ -44,7 +44,9 @@ export class LivraisonComponent {
 
     //readonly dialog = inject(MatDialog);
     readonly uow = inject(UowService);
+    @ViewChild(MatPaginator, { static: true })
     readonly paginator: MatPaginator;
+    @ViewChild(MatSort, { static: true })
     readonly sort: MatSort;
 
     isLoading: boolean = false;
@@ -52,11 +54,11 @@ export class LivraisonComponent {
     readonly showMessage$ = new Subject<any>();
 
     readonly update = new Subject<number>();
-    readonly numero = new FormControl('');
-    readonly dateDebut = new FormControl('');
-    readonly dateFin = new FormControl('');
-    readonly montantTTC = new FormControl('');
-    readonly client = new FormControl('');
+    readonly numero = new FormControl(0);
+    readonly dateDebut = new FormControl(null);
+    readonly dateFin = new FormControl(null);
+    readonly montantTTC = new FormControl(0);
+    readonly client = new FormControl(0);
     //
     public isLoadingResults = true;
     public totalRecords = 0;
@@ -87,26 +89,26 @@ export class LivraisonComponent {
             this.update,
             this.#delete$,
         )),
-        // startWith(null as any),
+        startWith(null as any),
         map(_ => ({
             startIndex: (this.paginator?.pageIndex || 0) * (this.paginator?.pageSize ?? 10),// startIndex
             pageSize: this.paginator?.pageSize ?? 10,
             numero: this.numero.value,
-            dateDebut: this.dateDebut.value,
-            dateFin: this.dateFin.value,
+            // dateDebut: this.dateDebut.value,
+            // dateFin: this.dateFin.value,
             montantTTC: this.montantTTC.value,
             idclient: this.client.value,
         })),
         tap(e => this.isLoadingResults = true),
-        switchMap(e => this.uow.livraisons.getAll(0, 0, this.numero, this.dateDebut, this.dateFin, this.montantTTC, this.client).pipe(
+        switchMap(e => this.uow.livraisons.getListQ(e).pipe(
             tap(),
-            map(e => e))
+            map(e => e.list))
         ),
         tap(e => this.isLoadingResults = false),
     ), { initialValue: [] }) as any;
 
     ngAfterViewInit(): void {
-        // this.viewInitDone.next();
+        this.viewInitDone.next();
     }
     panelOpenState = false;
 
@@ -125,11 +127,11 @@ export class LivraisonComponent {
     }
 
     reset() {
-        this.numero.setValue('');
-        this.dateDebut.setValue('');
-        this.dateFin.setValue('');
-        this.client.setValue('');
-        this.montantTTC.setValue('');
+        this.numero.setValue(0);
+        this.dateDebut.setValue(null);
+        this.dateFin.setValue(null);
+        this.client.setValue(0);
+        this.montantTTC.setValue(0);
         this.update.next(0);
     }
 

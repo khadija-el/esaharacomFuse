@@ -11,6 +11,11 @@ export class SuperService<T> {
 
   get = () => this.http.get<T[]>(`${this.urlApi}/${this.controller}/Get`);
 
+  getListQ = (args: any) => {
+    const queryParams = new URLSearchParams(args).toString();
+    return this.http.get<{ list: T[], count: number }>(`${this.urlApi}/${this.controller}/getList?${queryParams}`);
+};
+
   count = () => this.http.get<number>(`${this.urlApi}/${this.controller}/Count`);
 
   // getById = (id:any) => this.http.get<T>(`${this.urlApi}/${this.controller}/getById/${id}`);
